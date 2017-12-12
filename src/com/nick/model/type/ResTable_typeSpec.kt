@@ -27,16 +27,15 @@ import com.nick.model.unit.uint8_t
  * SPEC_PUBLIC = 0x40000000
  * };
  * };
- * @author i
  */
 class ResTable_typeSpec(var header: ResChunk_header,
-                        var id: uint8_t,
-                        var res0: uint8_t,
-                        var res1: uint16_t,
-                        var entryCount: uint32_t) {
+                        var id: uint8_t,// id，每个资源独有的id
+                        var res0: uint8_t,// 保留字段，为0
+                        var res1: uint16_t, // 保留字段，为0
+                        var entryCount: uint32_t) {// 资源项个数
 
     override fun toString(): String {
-        return """header = $header ,
+        return """header : $header ,
                 |id = ${id.getValue()}, idHexValue = ${id.getHexValue()},
                 |res0 =${res0.getValue()} ,res1 = ${res1.getValue()} ,
                 |entryCount = ${entryCount.getValue()}, entryCountHexValue = ${entryCount.getHexValue()}""".trimMargin()

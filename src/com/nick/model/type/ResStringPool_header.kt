@@ -11,10 +11,10 @@ class ResStringPool_header(var header: ResChunk_header,
                            var flags: uint32_t, //字符串的属性,可取值包括0x000(UTF-16),0x001(字符串经过排序)、0X100(UTF-8)和他们的组合值
                            var stringsStart: uint32_t, //字符串内容块相对于其头部的距离
                            var stylesStart: uint32_t, //字符串样式块相对于其头部的距离
-                           var stringOffsetArray: ResString_offset_array?,
-                           var styleOffsetArray: ResStyle_offset_array?,
-                           var stringStringArray: ResString_string_array?,
-                           var styleStringArray: ResStyle_string_array?
+                           var stringOffsetArray: ResString_offset_array?,//字符串偏移数组
+                           var styleOffsetArray: ResStyle_offset_array?,//字符串样式偏移数组
+                           var stringStringArray: ResString_string_array?,//字符串数组
+                           var styleStringArray: ResStyle_string_array?//字符串样式数组
 
 ) {
     // Flags.

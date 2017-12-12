@@ -1,7 +1,5 @@
 package com.nick.model.type
 
-import com.sun.xml.internal.fastinfoset.util.StringArray
-
 /**
  * Created by KangShuai on 2017/11/30.
  */

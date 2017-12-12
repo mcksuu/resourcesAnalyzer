@@ -12,7 +12,7 @@ import java.io.File
  * Created by KangShuai on 2017/12/6.
  */
 fun main(args: Array<String>) {
-    val stream = File("文件路径").inputStream()
+    val stream = File("H:\\javaworkpace\\idea\\resourcesAnalyzer\\src\\com\\nick\\resources.arsc").inputStream()
     val os = ByteArrayOutputStream()
     val bytes = ByteArray(1024)
     var len = stream.read(bytes)
@@ -22,16 +22,19 @@ fun main(args: Array<String>) {
     }
 
     val offset: Int
-    println("---------------------解析ResTable_header信息开始---------------------")
     val streamByte = os.toByteArray()
+    println("---------------------解析ResTable_header信息开始---------------------")
     val resTable_header = ResTable_header(getResChunk_header(streamByte, 0), read_uint32_t(streamByte, Config.RESCHUNK_HEADER_SIZE))
     println(resTable_header)
     println("---------------------解析ResTable_header信息完毕---------------------")
-    offset = resTable_header.header.headerSize.getValue().toInt()
 
+    // 偏移量即headerSize
+    offset = resTable_header.header.headerSize.getValue().toInt()
+    //读取字符串池
     val resStringPool_header = resStringPool_header(streamByte, offset)
     stringList = resStringPool_header.stringStringArray!!.stringArray
     println("读取Package信息")
+    // package的偏移量
     val packageOffset = resStringPool_header.header.size.getValue() + offset
     // 解析Package数据块
     val resTable_package = ResTable_package(
@@ -43,8 +46,10 @@ fun main(args: Array<String>) {
             read_uint32_t(streamByte, packageOffset + Config.RESCHUNK_HEADER_SIZE + 4 + 256 + 4 + 4),
             read_uint32_t(streamByte, packageOffset + Config.RESCHUNK_HEADER_SIZE + 4 + 256 + 4 + 4 + 4))
     println(resTable_package)
+    println("读取Package信息完毕")
 
     // 解析资源类型
+    // 偏移量设置，
     val resTypePoolOffset = resTable_package.header.headerSize.getValue().toInt() + packageOffset
     val resTypeStringPool_header = resStringPool_header(streamByte, resTypePoolOffset)
     // 解析资源类型值
@@ -58,6 +63,7 @@ fun main(args: Array<String>) {
     while (resTypeSpecOffset < streamByte.size) {
 
         if (read_uint16_t(streamByte, resTypeSpecOffset).getValue().toInt() == ResChunk_header.ChunkType.RES_TABLE_TYPE_SPEC_TYPE.type) {
+            println("读取ResTable_typeSpec开始")
             val resTable_typeSpec = ResTable_typeSpec(getResChunk_header(streamByte, resTypeSpecOffset),
                     read_uint8_t(streamByte, resTypeSpecOffset + Config.RESCHUNK_HEADER_SIZE),
                     read_uint8_t(streamByte, resTypeSpecOffset + Config.RESCHUNK_HEADER_SIZE + 1),
@@ -75,8 +81,9 @@ fun main(args: Array<String>) {
             val res_entry_array = Res_entry_array(arrayOfUint32_ts)
             println(res_entry_array)
             resTypeSpecOffset += resTable_typeSpec.header.size.getValue()
-            println("===========================================")
+            println("读取ResTable_typeSpec结束")
         } else {
+            println("读取ResTable_type开始")
             val resTable_type = ResTable_type(
                     getResChunk_header(streamByte, resTypeSpecOffset),
                     read_uint8_t(streamByte, resTypeSpecOffset + Config.RESCHUNK_HEADER_SIZE),
@@ -132,6 +139,7 @@ fun main(args: Array<String>) {
                     println(resTable_map_entry)
                     count += resTable_map_entry.size.getValue().toInt()
                     println(resString_string_array!!.stringArray[mapStr])
+                    println("--------------------------resTable_map start------------------------------")
                     for (index in 0..resTable_map_entry.count.getValue() - 1) {
                         val resTable_map = ResTable_map(
                                 ResTable_ref(
@@ -141,12 +149,10 @@ fun main(args: Array<String>) {
                                         read_uint8_t(streamByte, tempOffset + 4 + 2),
                                         read_uint8_t(streamByte, tempOffset + 4 + 2 + 1),
                                         read_uint32_t(streamByte, tempOffset + 4 + 2 + 1 + 1)))
-                        println("--------------------------resTable_map start------------------------------")
                         println(resTable_map)
-                        println("--------------------------resTable_map end------------------------------")
-                        count += 4 + 2 + 1 + 1 + 4
+                        count += Config.RESTABLE_MAP_SIZE
                     }
-//                    tempOffset += resTable_map_entry.count.getValue() * Config.RESTABLE_MAP_SIZE
+                    println("--------------------------resTable_map end------------------------------")
                 } else {
                     val resTable_entry = ResTable_entry(size, flags, ResStringPool_ref(read_uint32_t(streamByte, tempOffset + count + 2 + 2)))
                     val index = resTable_entry.key!!.index.getValue()
@@ -164,19 +170,20 @@ fun main(args: Array<String>) {
                     println("--------------------------res_value start------------------------------")
                     println(res_value)
                     println("--------------------------res_value end------------------------------")
-                    count += 8
+                    count += Config.RES_VALUE_SIZE
                 }
 
                 resId++
             }
             resTypeSpecOffset += resTable_type.header.size.getValue()
+            println("读取ResTable_type结束")
             println("===========================================")
         }
     }
 }
 
 private fun resStringPool_header(streamByte: ByteArray, offset: Int): ResStringPool_header {
-    println("---------------------解析ResStringPool_header信息完毕---------------------")
+    println("---------------------解析ResStringPool_header信息开始---------------------")
     val resStringPool_header = ResStringPool_header(getResChunk_header(streamByte, offset),
             read_uint32_t(streamByte, offset + Config.RESCHUNK_HEADER_SIZE),
             read_uint32_t(streamByte, offset + Config.RESCHUNK_HEADER_SIZE + 4),

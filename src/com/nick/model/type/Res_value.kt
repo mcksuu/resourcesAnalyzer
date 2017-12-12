@@ -4,10 +4,10 @@ import com.nick.model.unit.uint16_t
 import com.nick.model.unit.uint32_t
 import com.nick.model.unit.uint8_t
 
-class Res_value(var size: uint16_t,
-                var res0: uint8_t,
-                var dataType: uint8_t,
-                var data: uint32_t) {
+class Res_value(var size: uint16_t, // 大小
+                var res0: uint8_t, // 保留，0
+                var dataType: uint8_t, // 类型
+                var data: uint32_t) { // 数据,根据不同类型来展示不同数据，这部分基本上是网上拿来的
 
     val typeStr: String
         get() {

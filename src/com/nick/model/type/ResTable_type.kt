@@ -32,18 +32,17 @@ import com.nick.model.unit.uint8_t
  * // Configuration this collection of entries is designed for.
  * ResTable_config config;
  * };
- * @author i
  */
 class ResTable_type(var header: ResChunk_header,
-                    var id: uint8_t,
-                    var res0: uint8_t,
-                    var res1: uint16_t,
-                    var entryCount: uint32_t,
-                    var entriesStart: uint32_t,
-                    var resConfig: ResTable_config) {
+                    var id: uint8_t,// 标识资源的type id
+                    var res0: uint8_t,// 保留，0
+                    var res1: uint16_t,// 保留，0
+                    var entryCount: uint32_t,// 总个数
+                    var entriesStart: uint32_t,// 偏移量
+                    var resConfig: ResTable_config) {// 配置信息
 
     override fun toString(): String {
-        return """header:, $header ,
+        return """header: $header ,
                 |id = ${id.getValue()}, idHexValue = ${id.getHexValue()},
                 |res0 = ${res0.getValue()},res1 = ${res1.getValue()},
                 |entryCount = ${entryCount.getValue()}, entryCountHexValue = ${entryCount.getHexValue()},

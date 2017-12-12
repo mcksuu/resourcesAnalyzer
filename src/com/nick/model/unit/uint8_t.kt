@@ -5,6 +5,12 @@ package com.nick.model.unit
  */
 class uint8_t(value: Byte) : basic_unit<Byte>(value) {
     override fun getHexValue(): String {
-        return Integer.toHexString(relValue.toInt())
+        var toHexString = Integer.toHexString(getValue().toInt())
+        if (toHexString.length < 2) {
+            for (i in 1..2 - toHexString.length) {
+                toHexString = "0" + toHexString
+            }
+        }
+        return "0x" + toHexString
     }
 }

@@ -1,12 +1,14 @@
 package com.nick.model.unit
 
+import com.nick.model.type.getIntValue
+
 /**
  * uint32_t
  * Created by KangShuai on 2017/11/29.
  */
 class uint32_t(var value: Int) : basic_unit<Int>(value) {
     override fun getValue(): Int {
-        return com.nick.model.type.getIntValue(relValue)
+        return getIntValue(relValue)
     }
 
     override fun getHexValue(): String {

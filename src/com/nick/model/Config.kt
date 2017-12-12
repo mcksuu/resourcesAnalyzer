@@ -5,9 +5,8 @@ package com.nick.model
  */
 class Config {
     companion object {
-        val RESCHUNK_HEADER_SIZE = 8
-        val RESTABLE_HEADER_SIZE = RESCHUNK_HEADER_SIZE + 4
-        val RESTABLE_MAP_SIZE = 12
-        val RES_VALUE_SIZE = 8
+        val RESCHUNK_HEADER_SIZE = 8 //chunk头部大小
+        val RESTABLE_MAP_SIZE = 12 //res table map大小
+        val RES_VALUE_SIZE = 8 //res value大小
     }
 }

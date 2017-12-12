@@ -26,10 +26,11 @@ import com.nick.model.unit.uint16_t
 
  * @author i
  */
-open class ResTable_entry(var size: uint16_t,
-                          var flags: uint16_t,
-                          var key: ResStringPool_ref?) {
+open class ResTable_entry(var size: uint16_t, // 大小
+                          var flags: uint16_t, // flag，为1是ResTable_map_entry
+                          var key: ResStringPool_ref?) {    // 字符串池引用信息
     var dataStr: String? = ""
+
     override fun toString(): String {
         return "size = " + size.getValue() + ",flags = " + flags.getValue() + ",key = " + key!!.index.getValue() + ",str = " + dataStr
     }
